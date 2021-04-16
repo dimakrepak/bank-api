@@ -6,6 +6,6 @@ const usersRoute = require('./routes/users.route')
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api/bank/users', usersRoute);
+app.use('/api/bank', usersRoute);
 
 app.listen(port, () => console.log(`application start at ${port}`))
