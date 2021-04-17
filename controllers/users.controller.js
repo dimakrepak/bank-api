@@ -3,7 +3,15 @@ const { DefaultDeserializer } = require('v8');
 const bankJson = require('../bank.json');
 
 const getUsers = (req, res) => res.status(200).json({ users: bankJson.users });
+const getUser = (req, res) => {
+    const { id } = req.params;
+    let user = bankJson.users.find(u => u.id === id);
+    !user ?
+        res.status(200).json('User does not exist')
+        : res.status(200).json({ user });
 
+
+}
 const addUser = (req, res) => {
     const { id } = req.body;
     let user = bankJson.users.find(u => u.id === id);
@@ -50,6 +58,7 @@ const withdraw = (req, res) => {
     const { id } = req.params;
     const { cash } = req.body;
     let user = bankJson.users.find(u => u.id === id);
+
     if (!cash || cash < 0) res.status(200).json({ error: 'wrong amount!' });
     else if (user.cash <= -Math.abs(user.credit)) res.status(200).json(`Your balance empty, your credit balance is ${user.credit + user.cash}`);
     else {
@@ -63,6 +72,7 @@ const userTransfer = (req, res) => {
     const { from, to, amount } = req.body;
     const fromUser = bankJson.users.find(u => u.id === from.toString());
     const toUser = bankJson.users.find(u => u.id === to.toString());
+
     if (!from || !to) res.status(200).json({ error: 'invalid ID' })
     else if (!amount || amount < 0) res.status(200).json({ error: 'invalid amount' })
     else if (fromUser.cash <= -Math.abs(fromUser.credit)) res.status(200).json(`User ${fromUser.id} balance empty, current credit balance is ${fromUser.credit + fromUser.cash}`);
@@ -79,5 +89,6 @@ module.exports = {
     depositUser,
     updateCredit,
     withdraw,
-    userTransfer
+    userTransfer,
+    getUser
 }
