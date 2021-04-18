@@ -6,19 +6,19 @@ const getUsers = (req, res) => res.status(200).json({ users: bankJson.users });
 const getUser = (req, res) => {
     const { id } = req.params;
     let user = bankJson.users.find(u => u.id === id);
-    !user ?
+    !user || user === null || undefined ?
         res.status(200).json('User does not exist')
         : res.status(200).json({ user });
 
 
 }
 const addUser = (req, res) => {
-    const { id } = req.body;
+    const { id, cash, credit } = req.body;
     let user = bankJson.users.find(u => u.id === id);
     const userObj = {
         id: id,
-        cash: 0,
-        credit: 0
+        cash: cash,
+        credit: credit
     }
 
     if (!id) res.status(200).json('add id pls');
