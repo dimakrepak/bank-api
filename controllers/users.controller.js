@@ -36,7 +36,7 @@ const depositUser = (req, res) => {
 
     if (cash < 0 || !cash) res.status(200).json('something wrong with cash');
     else {
-        user.cash += cash;
+        user.cash += +cash;
         fs.writeFileSync('bank.json', JSON.stringify(bankJson));
         res.status(200).json({ success: 'cash added successfully' });
     }
@@ -48,7 +48,7 @@ const updateCredit = (req, res) => {
 
     if (credit < 100 || !credit) res.status(200).json('something wrong with credit');
     else {
-        user.credit = credit;
+        user.credit = +credit;
         fs.writeFileSync('bank.json', JSON.stringify(bankJson));
         res.status(200).json({ success: 'credit added successfully' });
     }
@@ -62,7 +62,7 @@ const withdraw = (req, res) => {
     if (!cash || cash < 0) res.status(200).json({ error: 'wrong amount!' });
     else if (user.cash <= -Math.abs(user.credit)) res.status(200).json(`Your balance empty, your credit balance is ${user.credit + user.cash}`);
     else {
-        user.cash -= cash;
+        user.cash -= +cash;
         fs.writeFileSync('bank.json', JSON.stringify(bankJson));
         res.status(200).json({ success: `withdraw works successfully, your credit is ${user.cash > 0 ? user.credit : user.credit + user.cash}` });
 
